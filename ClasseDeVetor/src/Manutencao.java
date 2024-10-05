@@ -4,22 +4,15 @@ import java.util.Scanner;
 import static java.lang.System.*;
 
 public class Manutencao {
-
-    private static BufferedReader arquivoDeEntrada;
-    private static BufferedWriter arquivoDeSaida;
     static Scanner leitor = new Scanner(in);
-    static boolean continuarPrograma = true;
+    static boolean continuarPrograma;
      // índice resultante da pesquisa binária
 
     public static void main(String[] args) throws Exception {
-        estud = new Estudante[3];  // 50 - tamanho físico
-        for (int ind=0; ind < 3; ind++)
-            estud[ind] = new Estudante(); // criar objetos Estudante vazios no vetor
-        quantosEstudantes = 0; // tamanho lógico (vetor vazio)
-        preencherVetorPorArquivo();
+        continuarPrograma = ManterEstudantes.preencherVetorPorArquivo();
         if (continuarPrograma) {
             seletorDeOpcoes();
-            salvarVetorNoArquivo();
+            ManterEstudantes.salvarVetorNoArquivo();
         }
         out.println("\nPrograma encerrado.");
     }
@@ -37,20 +30,80 @@ public class Manutencao {
             out.println("6 - Ordenar por curso");
             out.println("7 - Ordenar por nome");
             out.println("8 - Ordenar por média");
+            out.println("9 - Estatísticas");
             out.print("\nSua opção: ");
             opcao = leitor.nextInt();
             leitor.nextLine();      // necessário após nextInt() para poder ler strings a seguir
             switch(opcao) {
-
+                case 1: inclui();
+                case 2: listaEstud();
+                case 3: excluir();
+                case 4: listaSit();
+                case 5: digitaNotas();
+                case 6: ordenarCurso();
+                case 7: ordenarNome();
+                case 8: ordenarMedia();
+                case 9: estatisticas();
             }
         }
         while (opcao != 0);
     }
 
-    // compareTo()   == 0 primeiro dado igual outro dado
-    // compareTo()   < 0  primeiro dado < outro dado
-    // compareTo()   > 0  dado this > outro dado
-    // esse método guarda no atributo "onde" o índice de inclusão ou
-    // o índice em que o estudante procurado foi encontrado
+
+    private static void inclui() throws Exception {
+        out.println("Vamos incluir um estudante!");
+
+        out.println("Incluir Estudante\n");
+        out.print("Curso : ");
+        String curso = leitor.nextLine();
+        out.print("RA    : ");
+        String ra = leitor.nextLine();
+        out.print("Nome  : ");
+        String nome = leitor.nextLine();
+
+        ManterEstudantes.incluirEstudante(curso,ra,nome);
+    }
+
+    private static void listaEstud() {
+        out.println("Vamos listar os estudantes!");
+        ManterEstudantes.listarEstudantes();
+    }
+
+    private static void listaSit() {
+        out.println("Vamos listar as Situações dos Alunos!");
+        ManterEstudantes.listarSituacoes();
+    }
+    private static void excluir() throws Exception {
+        out.println("Excluir Estudante\n");
+        out.print("RA    : ");
+        String ra = leitor.nextLine();
+
+        ManterEstudantes.excluirEstudante(ra);
+    }
+    private static void ordenarCurso() {
+        out.println("Estudante ordenados por curso:");
+
+        ManterEstudantes.ordenarPorCurso();
+    }
+    private static void ordenarNome() {
+        out.println("Estudante ordenados por curso:");
+
+        ManterEstudantes.ordenarPorNome();
+    }
+    private static void ordenarMedia() {
+        out.println("Estudante ordenados por curso:");
+
+        ManterEstudantes.ordenarPorMedia();
+    }
+    private static void digitaNotas() {
+        out.println("Digitação de notas de estudante:\n");
+        out.print("Digite o RA do(a) estudante desejado(a): ");
+        String raEstudante = leitor.nextLine();
+
+        ManterEstudantes.digitarNotas(raEstudante);
+    }
+    private static void estatisticas() {
+        out.println("Estatisticas dos alunos");
     }
 }
+
