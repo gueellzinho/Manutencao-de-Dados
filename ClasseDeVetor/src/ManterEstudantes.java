@@ -1,153 +1,234 @@
 import javax.swing.*;
-
 import java.io.*;
 import java.util.Scanner;
-
 import static java.lang.System.in;
 import static java.lang.System.out;
 
-public class ManterEstudantes {
-    enum Ordens {porRa, porNome, porCurso, porMedia};
-    private static Ordens ordemAtual = Ordens.porRa;
-    private static Estudante[] estud;
-    private static int quantosEstudantes;
-    static int onde;
+public class ManterEstudantes implements ManterDados {
+    int qtosDados, posicaoAtual;
+    Estudante[] dados = new Estudante[50];
+    Situacao situacao;
     static Scanner leitor = new Scanner(in);
-    private static BufferedReader arquivoDeEntrada;
-    private static BufferedWriter arquivoDeSaida;
 
-    public ManterEstudantes(){
-        estud = new Estudante[50];
-        for (int ind=0; ind < 3; ind++)
-            estud[ind] = new Estudante();
-        quantosEstudantes = 0;
-    }
-    public static boolean preencherVetorPorArquivo() {
-        boolean continuarPrograma = true;
+    public void leituraDosDados(String nomeDoArquivo) {
         try {
-            arquivoDeEntrada = new BufferedReader(
-                    new FileReader("c:\\temp\\dadosEstudantes.txt")
-            );
+            posicaoAtual = 0;
+            BufferedReader arquivoDeEntrada = new BufferedReader(
+                    new FileReader("c:\\temp\\dadosEstudantes.txt"));
             String linhaDoArquivo = "";
-            try
-            {
+            try {
                 boolean parar = false;
-                while (! parar)
-                {
-                    Estudante novoEstudante = new Estudante();
-                    try
-                    {
-                        if (novoEstudante.leuLinhaDoArquivo(arquivoDeEntrada) ) {
-                            estud[quantosEstudantes] = novoEstudante;
-                            quantosEstudantes++;
+                while (! parar) {
+                    Estudante novoDado = new Estudante();
+
+                    try {
+
+                        if (novoDado.leuLinhaDoArquivo(arquivoDeEntrada) ) {
+                            incluirNoFinal(novoDado);
                         }
                         else
+
                             parar = true;
                     }
-                    catch (Exception erroDeLeitura)
-                    {
+
+                    catch (Exception erroDeLeitura) {
+
                         out.println(erroDeLeitura.getMessage());
+
                         parar = true;
+
                     }
                 }
                 arquivoDeEntrada.close();
             }
-            catch (IOException erroDeIO)
-            {
+            catch (IOException erroDeIO) {
                 out.println(erroDeIO.getMessage());
-                continuarPrograma = false;
             }
         }
         catch (FileNotFoundException erro) {
             out.println(erro.getMessage());
-            continuarPrograma = false;
         }
-        return continuarPrograma;
     }
 
-    public static void salvarVetorNoArquivo() throws IOException {
-        arquivoDeSaida = new BufferedWriter(
+    public void gravarDados(String nomeArquivo) throws IOException {
+        BufferedWriter arquivoDeSaida = new BufferedWriter(
                 new FileWriter("c:\\temp\\dadosEstudantes.txt"));
-        if (ordemAtual != Ordens.porRa)
-            ordenarPorRa();
-        for (int indice=0; indice < quantosEstudantes; indice++)
-            arquivoDeSaida.write(estud[indice].formatoDeArquivo());
+        for (int indice=0; indice < qtosDados; indice++)
+            arquivoDeSaida.write(dados[indice].formatoDeArquivo());
         arquivoDeSaida.close();
     }
 
-    public static boolean existeEstudante(Estudante estProcurado) {
+    public Boolean existe(Estudante dadoProcurado) {
         int inicio = 0;
-        int fim = quantosEstudantes - 1;
+        int fim = qtosDados - 1;
         boolean achou = false;
         while (! achou && inicio <= fim) {
-            onde = (inicio + fim) / 2;
-            String raDoMeioDoTrechoDoVetor = estud[onde].getRa();
-            String raDoProcurado = estProcurado.getRa();
+            posicaoAtual = (inicio + fim) / 2;
+            String raDoMeioDoTrechoDoVetor = dados[posicaoAtual].getRa();
+            String raDoProcurado = dadoProcurado.getRa();
             if (raDoMeioDoTrechoDoVetor.compareTo(raDoProcurado) == 0)
                 achou = true;
             else
             if (raDoProcurado.compareTo(raDoMeioDoTrechoDoVetor) < 0)
-                fim = onde - 1;
+                fim = posicaoAtual - 1;
             else
-                inicio = onde + 1;
+                inicio = posicaoAtual + 1;
         }
         if (!achou)
-            onde = inicio;
+            posicaoAtual = inicio;
         return achou;
     }
 
-    public static void incluirEstudante(String curso, String ra, String nome) throws Exception {
+    public void trocar(int origem, int destino)
+    {
+        
+    }
+
+    public void incluirNoFinal(Estudante novoDado) {
+        if (!existe(novoDado)) {
+            if (qtosDados >= dados.length)
+                expandirVetor();
+            dados[qtosDados - 1] = novoDado;
+            qtosDados++;
+        }
+        else
+            out.println("Estudante já existe");
+    }
+
+    public void incluirEm(Estudante novoDado, int posicaoDeInclusao) {
+        if (!existe(novoDado)) {
+            if (qtosDados >= dados.length)
+                expandirVetor();
+            for (int indice = posicaoDeInclusao; indice > posicaoAtual; indice--)
+                dados[indice] = dados[indice-1];
+            dados[posicaoDeInclusao] = novoDado;
+            qtosDados++;
+        }
+        else
+            out.println("Estudante já existe");
+    }
+
+    public void excluir(int posicaoDeExclusao) {
+        qtosDados--;
+        for (int indice=posicaoDeExclusao; indice < posicaoDeExclusao; indice++)
+            dados[indice] = dados[indice+1];
+    }
+
+    public void alterar(int posicaoDeAlteracao, Estudante novoDado){
+        if (posicaoDeAlteracao >= 0 && posicaoDeAlteracao < qtosDados)
+            dados[posicaoDeAlteracao] = novoDado;
+        else
+            throw new IndexOutOfBoundsException();
+    }
+
+    public void ordenar(){
+        Estudante auxiliar;
+            for (int lento = 0; lento < qtosDados; lento++){
+                for (int rapido = lento+1; rapido < qtosDados; rapido++){
+                    if (Integer.parseInt(dados[lento].getRa()) > Integer.parseInt(dados[rapido].getRa())) {
+                        auxiliar = dados[lento];
+                        dados[lento] = dados[rapido];
+                        dados[rapido] = auxiliar;
+                    }
+                }
+            }
+    }
+    public Boolean estaVazio(){
+        if (dados[posicaoAtual] == null)
+            return true;
+        else
+            return false;
+    }
+    public Boolean estaNoInicio(){
+        for (int i = 0; i < qtosDados/2; i++) {
+            if (dados[i] == dados[posicaoAtual])
+                return true;
+        }
+        return false;
+    }
+    public Boolean estaNoFim(){
+        for (int i = qtosDados/2; i < qtosDados; i++) {
+            if (dados[i] == dados[posicaoAtual])
+                return true;
+        }
+        return false;
+    }
+
+    public void irAoInicio(){
+        posicaoAtual = 0;
+    }
+    public void irAoFim(){
+        posicaoAtual = qtosDados-1;
+    }
+    public void irAoAnterior(){
+        posicaoAtual -= 1;
+    }
+    public void irAoProximo(){
+        posicaoAtual += 1;
+    }
+    public int getPosicaoAtual(){
+        return posicaoAtual;
+    }
+    public void setPosicaoAtual(int novaPosicao){
+        posicaoAtual = novaPosicao;
+    }
+    public Situacao getSituacao(){
+        return situacao;
+    }
+    public void setSituacao(Situacao novaSituacao){
+        situacao = novaSituacao;
+    }
+
+    public Estudante valorDe(int indiceDeAcesso){return dados[indiceDeAcesso];}
+
+    public void incluirEstudante(String curso, String ra, String nome) throws Exception {
         if (ordemAtual != Ordens.porRa)
             ordenarPorRa();
         Estudante umEstudante = new Estudante(curso, ra, nome);
-        if (existeEstudante(umEstudante))
+        if (existe(umEstudante))
             JOptionPane.showMessageDialog(null,"Estudante repetido!");
         else
         {
             incluirEmOrdem(umEstudante);
         }
     }
-    public static void excluirEstudante(String ra) throws Exception {
+    public void excluirEstudante(String ra) throws Exception {
         if (ordemAtual != Ordens.porRa)
             ordenarPorRa();
         Estudante umEstudante = new Estudante(" ", ra, " ");
-        if (!existeEstudante(umEstudante))
+        if (!existe(umEstudante))
             JOptionPane.showMessageDialog(null,"Estudante não encontrado!");
         else
         {
-            excluir(onde);
+            excluir(posicaoAtual);
         }
     }
-    private static void expandirVetor() {
-        Estudante[] novoVetor = new Estudante[estud.length * 2];
-        for (int indice=0; indice<quantosEstudantes; indice++)
-            novoVetor[indice] = estud[indice];
-        estud = novoVetor;
+    public void expandirVetor() {
+        Estudante[] novoVetor = new Estudante[dados.length * 2];
+        for (int indice=0; indice<qtosDados; indice++)
+            novoVetor[indice] = dados[indice];
+        dados = novoVetor;
     }
-    private static void incluirEmOrdem(Estudante novo) {
-        if (quantosEstudantes >= estud.length)
+    public void incluirEmOrdem(Estudante novo) {
+        if (qtosDados >= dados.length)
             expandirVetor();
         // desloco para a direita os estudantes com RA > RA do novo
-        for (int indice = quantosEstudantes; indice > onde; indice--)
-            estud[indice] = estud[indice-1];
-        estud[onde] = novo;
-        quantosEstudantes++;
+        for (int indice = qtosDados; indice > posicaoAtual; indice--)
+            dados[indice] = dados[indice-1];
+        dados[posicaoAtual] = novo;
+        qtosDados++;
     }
 
 
 
-    private static void excluir(int indiceDeExclusao) {
-        quantosEstudantes--;
-        for (int indice=indiceDeExclusao; indice < quantosEstudantes; indice++)
-            estud[indice] = estud[indice+1];
-    }
 
-    public static void listarEstudantes() {
+
+    public void listarEstudantes() {
         out.println("\n\nListagem de Estudantes\n");
         int contLinha = 0;  // contador de linhas
-        for (int ind = 0; ind < quantosEstudantes; ind++)
+        for (int ind = 0; ind < qtosDados; ind++)
         {
-            out.println(estud[ind]);
+            out.println(dados[ind]);
 
             if (++contLinha >= 20) {
                 out.print("\n\nTecle [Enter] para prosseguir: ");
@@ -159,66 +240,62 @@ public class ManterEstudantes {
         leitor.nextLine();
     }
 
-    public static void listarSituacoes() {
+    public void listarSituacoes() {
         out.println("\n\nSituação estudantil\n");
         String situacao = "";
-        for (int indice = 0; indice < quantosEstudantes; indice++)
+        for (int indice = 0; indice < qtosDados; indice++)
         {
-            double mediaDesseEstudante = estud[indice].mediaDasNotas();
+            double mediaDesseEstudante = dados[indice].mediaDasNotas();
             if (mediaDesseEstudante < 5)
                 situacao = "Não promovido(a)";
             else
                 situacao = "Promovido(a)    ";
 
             out.printf(
-                    "%4.1f %16s "+estud[indice]+"\n", mediaDesseEstudante,
+                    "%4.1f %16s "+dados[indice]+"\n", mediaDesseEstudante,
                     situacao);
         }
         out.print("\n\nTecle [Enter] para prosseguir: ");
         leitor.nextLine();
     }
-    private static void trocar(int indMaior, int indMenor) {
-        Estudante auxiliar = estud[indMaior];
-        estud[indMaior] = estud[indMenor];
-        estud[indMenor] = auxiliar;
-    }
-    public static void ordenarPorCurso() {
-        for (int lento=0; lento < quantosEstudantes; lento++)
-            for (int rapido=lento+1; rapido < quantosEstudantes; rapido++)
-                if (estud[lento].getCurso().compareTo(estud[rapido].getCurso()) > 0)
+
+    public void ordenarPorCurso() {
+        for (int lento=0; lento < qtosDados; lento++)
+            for (int rapido=lento+1; rapido < qtosDados; rapido++)
+                if (dados[lento].getCurso().compareTo(dados[rapido].getCurso()) > 0)
                     trocar(lento, rapido);
         ordemAtual = Ordens.porCurso;
     }
 
-    public static void ordenarPorRa() {
-        for (int lento=0; lento < quantosEstudantes; lento++)
-            for (int rapido=lento+1; rapido < quantosEstudantes; rapido++)
-                if (estud[lento].getRa().compareTo(estud[rapido].getRa()) > 0)
+    public void ordenarPorRa() {
+        for (int lento=0; lento < qtosDados; lento++)
+            for (int rapido=lento+1; rapido < qtosDados; rapido++)
+                if (dados[lento].getRa().compareTo(dados[rapido].getRa()) > 0)
                     trocar(lento, rapido);
         ordemAtual = Ordens.porRa;
     }
 
-    public static void ordenarPorNome() {
-        for (int lento=0; lento < quantosEstudantes; lento++)
-            for (int rapido=lento+1; rapido < quantosEstudantes; rapido++)
-                if (estud[lento].getNome().compareTo(estud[rapido].getNome()) > 0)
+    public void ordenarPorNome() {
+        for (int lento=0; lento < qtosDados; lento++)
+            for (int rapido=lento+1; rapido < qtosDados; rapido++)
+                if (dados[lento].getNome().compareTo(dados[rapido].getNome()) > 0)
                     trocar(lento, rapido);
         ordemAtual = Ordens.porNome;
     }
 
-    public static void ordenarPorMedia() {
-        for (int lento=0; lento < quantosEstudantes; lento++) {
-            double mediaAtual = estud[lento].mediaDasNotas();
-            for (int rapido=lento+1; rapido < quantosEstudantes; rapido++)
-                if (mediaAtual > estud[rapido].mediaDasNotas())
+    public void ordenarPorMedia() {
+        for (int lento=0; lento < qtosDados; lento++) {
+            double mediaAtual = dados[lento].mediaDasNotas();
+            for (int rapido=lento+1; rapido < qtosDados; rapido++)
+                if (mediaAtual > dados[rapido].mediaDasNotas())
                     trocar(lento, rapido);
             ordemAtual = Ordens.porMedia;
         }
     }
-    static void digitarNotas(String raEstudante) {
+    publoc void digitarNotas(String raEstudante) {
         try {
             Estudante estProc = new Estudante("00", raEstudante, "A");
-            if (!existeEstudante(estProc))
+            if (!existe(estProc))
                 out.println("Não há um(a) estudante com esse RA!");
             else {  // se RA foi encontrado, variável onde contém seu índice
                 out.print("Quantidade de notas a serem digitadas: ");

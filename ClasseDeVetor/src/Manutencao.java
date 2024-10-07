@@ -3,15 +3,16 @@ import static java.lang.System.*;
 
 public class Manutencao {
     static Scanner leitor = new Scanner(in);
-    static boolean continuarPrograma;
+    static ManterEstudantes estuds;
      // índice resultante da pesquisa binária
 
     public static void main(String[] args) throws Exception {
-        continuarPrograma = ManterEstudantes.preencherVetorPorArquivo();
-        if (continuarPrograma) {
-            seletorDeOpcoes();
-            ManterEstudantes.salvarVetorNoArquivo();
-        }
+        estuds = new ManterEstudantes();
+        out.println("Digite o arquivo que deseja abrir: ");
+        String arq = leitor.nextLine();
+        estuds.leituraDosDados(arq);
+        seletorDeOpcoes();
+        ManterEstudantes.salvarVetorNoArquivo();
         out.println("\nPrograma encerrado.");
     }
 
