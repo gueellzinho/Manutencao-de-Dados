@@ -1,5 +1,3 @@
-import javax.swing.*;
-import java.io.*;
 import java.util.Scanner;
 import static java.lang.System.*;
 
@@ -35,15 +33,15 @@ public class Manutencao {
             opcao = leitor.nextInt();
             leitor.nextLine();      // necessário após nextInt() para poder ler strings a seguir
             switch(opcao) {
-                case 1: inclui();
-                case 2: listaEstud();
-                case 3: excluir();
-                case 4: listaSit();
-                case 5: digitaNotas();
-                case 6: ordenarCurso();
-                case 7: ordenarNome();
-                case 8: ordenarMedia();
-                case 9: estatisticas();
+                case 1: inclui();break;
+                case 2: listaEstud();break;
+                case 3: excluir();break;
+                case 4: listaSit();break;
+                case 5: digitaNotas();break;
+                case 6: ordenarCurso();break;
+                case 7: ordenarNome();break;
+                case 8: ordenarMedia();break;
+                case 9: estatisticas();break;
             }
         }
         while (opcao != 0);
@@ -84,7 +82,7 @@ public class Manutencao {
         out.println("Estudante ordenados por curso:");
 
         ManterEstudantes.ordenarPorCurso();
-    }
+}
     private static void ordenarNome() {
         out.println("Estudante ordenados por curso:");
 
