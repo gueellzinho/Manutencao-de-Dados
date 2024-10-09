@@ -109,6 +109,13 @@ public class ManterEstudantes implements ManterDados {
             out.println("Estudante já existe");
     }
 
+    public void expandirVetor() {
+        Estudante[] novoVetor = new Estudante[dados.length * 2];
+        for (int indice=0; indice<qtosDados; indice++)
+            novoVetor[indice] = dados[indice];
+        dados = novoVetor;
+    }
+
     public void excluir(int posicaoDeExclusao) {
         qtosDados--;
         for (int indice=posicaoDeExclusao; indice < posicaoDeExclusao; indice++)
