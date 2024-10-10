@@ -1,10 +1,15 @@
 import javax.swing.*;
+<<<<<<< HEAD
 import java.io.*;
+=======
+>>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
 import java.util.Scanner;
 import static java.lang.System.*;
 
 public class Manutencao {
+    enum Ordens {porRa, porNome, porCurso, porMedia}
     static Scanner leitor = new Scanner(in);
+<<<<<<< HEAD
     enum Ordens {porRa, porNome, porCurso, porMedia};
     private static Ordens ordemAtual = Ordens.porRa;
     private static ManterEstudantes estuds = new ManterEstudantes();
@@ -21,6 +26,22 @@ public class Manutencao {
         catch (FileNotFoundException erro) {
             out.println(erro.getMessage());
         }
+=======
+    static ManterEstudantes estuds;
+    private static Ordens ordemAtual = Ordens.porRa;
+     // índice resultante da pesquisa binária
+
+    public static void main(String[] args) throws Exception {
+        estuds = new ManterEstudantes();
+        for (int ind=0; ind < 3; ind++)
+            estuds.dados[ind] = new Estudante();
+        out.println("Digite o arquivo que deseja abrir: ");
+        String arq = leitor.nextLine();
+        estuds.leituraDosDados(arq);
+        seletorDeOpcoes();
+        estuds.gravarDados(arq);
+        out.println("\nPrograma encerrado.");
+>>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
     }
 
     public static void seletorDeOpcoes() throws Exception {
@@ -43,6 +64,7 @@ public class Manutencao {
             leitor.nextLine();      // necessário após nextInt() para poder ler strings a seguir
             switch(opcao) {
                 case 1: incluirEstudante();break;
+<<<<<<< HEAD
                 case 2: estuds.listarEstudantes();break;
                 case 3: excluir();break;
                 case 4: estuds.listarSituacoes();break;
@@ -52,6 +74,16 @@ public class Manutencao {
                 case 8: ordenarPorMedia();break;
                 case 9: ordenarPorRa();break;
                 case 10: estatisticas();break;
+=======
+                case 2: listarEstudantes();break;
+                case 3: excluirEstudante();break;
+                case 4: listarSituacoes();break;
+                case 5: digitarNotas();break;
+                case 6: ordenarPorCurso();break;
+                case 7: ordenarPorNome();break;
+                case 8: ordenarPorMedia();break;
+                case 9: estatisticas();break;
+>>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
             }
         }
         while (opcao != 0);
@@ -69,6 +101,7 @@ public class Manutencao {
         out.print("Nome  : ");
         String nome = leitor.nextLine();
 
+<<<<<<< HEAD
         estuds.incluirEstudante(curso,ra,nome);
     }
 
@@ -78,16 +111,22 @@ public class Manutencao {
         String ra = leitor.nextLine();
 
         estuds.excluirEstudante(ra);
-    }
-    private static void digitaNotas() {
-        out.println("Digitação de notas de estudante:\n");
-        out.print("Digite o RA do(a) estudante desejado(a): ");
-        String raEstudante = leitor.nextLine();
+=======
+        Estudante novoEstud = new Estudante(curso,ra,nome);
 
-        estuds.digitarNotas(raEstudante);
+        estuds.incluirNoFinal(novoEstud);
     }
-    private static void estatisticas() {
-        out.println("Estatisticas dos alunos");
+    private static void excluirEstudante() throws Exception {
+        out.println("Vamos excluir um estudante!");
+        out.print("RA    : ");
+        String ra = leitor.nextLine();
+        Estudante umEstudante = new Estudante(" ", ra, " ");
+        if (estuds.existe(umEstudante))
+            estuds.excluir(estuds.posicaoAtual);
+        else
+        {
+            estuds.excluir(estuds.getPosicaoAtual());
+        }
     }
     public static void ordenarPorCurso() {
         for (int lento=0; lento < estuds.qtosDados; lento++)
@@ -96,6 +135,146 @@ public class Manutencao {
                     estuds.trocar(lento, rapido);
         ordemAtual = Ordens.porCurso;
     }
+
+    public void ordenarPorRa() {
+        for (int lento=0; lento < estuds.qtosDados; lento++)
+            for (int rapido=lento+1; rapido < estuds.qtosDados; rapido++)
+                if (estuds.dados[lento].getRa().compareTo(estuds.dados[rapido].getRa()) > 0)
+                    estuds.trocar(lento, rapido);
+        ordemAtual = Ordens.porRa;
+>>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
+    }
+
+<<<<<<< HEAD
+        estuds.digitarNotas(raEstudante);
+=======
+    public static void ordenarPorNome() {
+        for (int lento=0; lento < estuds.qtosDados; lento++)
+            for (int rapido=lento+1; rapido < estuds.qtosDados; rapido++)
+                if (estuds.dados[lento].getNome().compareTo(estuds.dados[rapido].getNome()) > 0)
+                    estuds.trocar(lento, rapido);
+        ordemAtual = Ordens.porNome;
+    }
+
+    public static void ordenarPorMedia() {
+        for (int lento=0; lento < estuds.qtosDados; lento++) {
+            double mediaAtual = estuds.dados[lento].mediaDasNotas();
+            for (int rapido=lento+1; rapido < estuds.qtosDados; rapido++)
+                if (mediaAtual > estuds.dados[rapido].mediaDasNotas())
+                    estuds.trocar(lento, rapido);
+            ordemAtual = Ordens.porMedia;
+        }
+>>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
+    }
+    private static void estatisticas() {
+        out.println("Estatisticas dos alunos");
+    }
+<<<<<<< HEAD
+    public static void ordenarPorCurso() {
+        for (int lento=0; lento < estuds.qtosDados; lento++)
+            for (int rapido=lento+1; rapido < estuds.qtosDados; rapido++)
+                if (estuds.dados[lento].getCurso().compareTo(estuds.dados[rapido].getCurso()) > 0)
+                    estuds.trocar(lento, rapido);
+        ordemAtual = Ordens.porCurso;
+    }
+=======
+    public static void listarEstudantes() {
+        out.println("\n\nListagem de Estudantes\n");
+        int contLinha = 0;  // contador de linhas
+        for (int ind = 0; ind < estuds.qtosDados; ind++)
+        {
+            out.println(estuds.dados[ind]);
+
+            if (++contLinha >= 20) {
+                out.print("\n\nTecle [Enter] para prosseguir: ");
+                leitor.nextLine();
+                contLinha = 0;
+            }
+        }
+        out.print("\n\nTecle [Enter] para prosseguir: ");
+        leitor.nextLine();
+    }
+
+    public static void listarSituacoes() {
+        out.println("\n\nSituação estudantil\n");
+        String situacao = "";
+        for (int indice = 0; indice < estuds.qtosDados; indice++)
+        {
+            double mediaDesseEstudante = estuds.dados[indice].mediaDasNotas();
+            if (mediaDesseEstudante < 5)
+                situacao = "Não promovido(a)";
+            else
+                situacao = "Promovido(a)    ";
+
+            out.printf(
+                    "%4.1f %16s "+estuds.dados[indice]+"\n", mediaDesseEstudante,
+                    situacao);
+        }
+        out.print("\n\nTecle [Enter] para prosseguir: ");
+        leitor.nextLine();
+    }
+    public static void digitarNotas(String raEstudante) {
+        try {
+            Estudante estProc = new Estudante("00", raEstudante, "A");
+            if (!estuds.existe(estProc))
+                out.println("Não há um(a) estudante com esse RA!");
+            else {  // se RA foi encontrado, variável onde contém seu índice
+                out.print("Quantidade de notas a serem digitadas: ");
+                int quant = leitor.nextInt();
+                leitor.nextLine();
+
+                estuds.dados[estuds.posicaoAtual].setQuantasNotas(quant);
+                double nota;
+                for (int indNota = 0; indNota < quant; indNota++) {
+                    do {
+                        out.printf("Digite a %da. nota:", indNota + 1);
+                        nota = leitor.nextDouble();
+                        if (nota >= 0 && nota <= 10)
+                            break;  // sai do do-while
+                        out.println("Nota inválida. Digite novamente:");
+                    } while (true);
+                    estuds.dados[estuds.posicaoAtual].setNota(nota, indNota);
+                }
+            }
+        }
+        catch (Exception erro) {
+            out.println("Não foi possivel criar objeto Estudante.");
+            out.println(erro.getMessage());
+        }
+    }
+    public void incluirEstudante(String curso, String ra, String nome) throws Exception {
+        if (ordemAtual != Ordens.porRa)
+            ordenarPorRa();
+        Estudante umEstudante = new Estudante(curso, ra, nome);
+        if (estuds.existe(umEstudante))
+            JOptionPane.showMessageDialog(null,"Estudante repetido!");
+        else
+        {
+            incluirEmOrdem(umEstudante);
+        }
+    }
+    public void excluirEstudante(String ra) throws Exception {
+        if (ordemAtual != Ordens.porRa)
+            ordenarPorRa();
+        Estudante umEstudante = new Estudante(" ", ra, " ");
+        if (!estuds.existe(umEstudante))
+            JOptionPane.showMessageDialog(null,"Estudante não encontrado!");
+        else
+        {
+            estuds.excluir(estuds.posicaoAtual);
+        }
+    }
+    public void incluirEmOrdem(Estudante novo) {
+        if (estuds.qtosDados >= estuds.dados.length)
+            estuds.expandirVetor();
+        // desloco para a direita os estudantes com RA > RA do novo
+        for (int indice = estuds.qtosDados; indice > estuds.posicaoAtual; indice--)
+            estuds.dados[indice] = estuds.dados[indice-1];
+        estuds.dados[estuds.posicaoAtual] = novo;
+        estuds.qtosDados++;
+    }
+}
+>>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
 
     public static void ordenarPorRa() {
         for (int lento=0; lento < estuds.qtosDados; lento++)
