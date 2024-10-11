@@ -12,16 +12,11 @@ public class ManterEstudantes {
     private static BufferedReader arquivoDeEntrada;
     private static BufferedWriter arquivoDeSaida;
 
-<<<<<<< HEAD
     public void leituraDosDados(String nomeArquivo) throws IOException {
         dados = new Estudante[50];
         for (int ind=0; ind < 50; ind++)
             dados[ind] = new Estudante();
         qtosDados = 0;
-=======
-
-    public void leituraDosDados(String nomeDoArquivo) {
->>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
         try {
             posicaoAtual = 0;
             BufferedReader arquivoDeEntrada = new BufferedReader(
@@ -66,7 +61,6 @@ public class ManterEstudantes {
             arquivoDeSaida.write(dados[indice].formatoDeArquivo());
         arquivoDeSaida.close();
     }
-<<<<<<< HEAD
     public static void listarEstudantes() {
         out.println("\n\nListagem de Estudantes\n");
         int contLinha = 0;  // contador de linhas
@@ -85,21 +79,13 @@ public class ManterEstudantes {
     }
 
     public boolean existeEstudante(Estudante estProcurado) {
-=======
-
-    public Boolean existe(Estudante dadoProcurado) {
->>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
         int inicio = 0;
         int fim = qtosDados - 1;
         boolean achou = false;
         while (! achou && inicio <= fim) {
             posicaoAtual = (inicio + fim) / 2;
             String raDoMeioDoTrechoDoVetor = dados[posicaoAtual].getRa();
-<<<<<<< HEAD
             String raDoProcurado = estProcurado.getRa();
-=======
-            String raDoProcurado = dadoProcurado.getRa();
->>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
             if (raDoMeioDoTrechoDoVetor.compareTo(raDoProcurado) == 0)
                 achou = true;
             else
@@ -113,7 +99,6 @@ public class ManterEstudantes {
         return achou;
     }
 
-<<<<<<< HEAD
     public void incluirEstudante(String curso, String ra, String nome) throws Exception {
         Estudante umEstudante = new Estudante(curso, ra, nome);
         if (existeEstudante(umEstudante))
@@ -153,24 +138,11 @@ public class ManterEstudantes {
             if (qtosDados >= dados.length)
                 expandirVetor();
             dados[qtosDados] = novoDado;
-=======
-    public void trocar(int origem, int destino)
-    {
-        
-    }
-
-    public void incluirNoFinal(Estudante novoDado) {
-        if (!existe(novoDado)) {
-            if (qtosDados >= dados.length)
-                expandirVetor();
-            dados[qtosDados - 1] = novoDado;
->>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
             qtosDados++;
         }
         else
             out.println("Estudante já existe");
     }
-<<<<<<< HEAD
     private static void excluir(int indiceDeExclusao) {
         qtosDados--;
         for (int indice=indiceDeExclusao; indice < qtosDados; indice++)
@@ -199,33 +171,6 @@ public class ManterEstudantes {
         Estudante auxiliar = dados[indMaior];
         dados[indMaior] = dados[indMenor];
         dados[indMenor] = auxiliar;
-=======
-
-    public void incluirEm(Estudante novoDado, int posicaoDeInclusao) {
-        if (!existe(novoDado)) {
-            if (qtosDados >= dados.length)
-                expandirVetor();
-            for (int indice = posicaoDeInclusao; indice > posicaoAtual; indice--)
-                dados[indice] = dados[indice-1];
-            dados[posicaoDeInclusao] = novoDado;
-            qtosDados++;
-        }
-        else
-            out.println("Estudante já existe");
-    }
-
-    public void expandirVetor() {
-        Estudante[] novoVetor = new Estudante[dados.length * 2];
-        for (int indice=0; indice<qtosDados; indice++)
-            novoVetor[indice] = dados[indice];
-        dados = novoVetor;
-    }
-
-    public void excluir(int posicaoDeExclusao) {
-        qtosDados--;
-        for (int indice=posicaoDeExclusao; indice < posicaoDeExclusao; indice++)
-            dados[indice] = dados[indice+1];
->>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
     }
 
     public void alterar(int posicaoDeAlteracao, Estudante novoDado){
@@ -234,7 +179,6 @@ public class ManterEstudantes {
         else
             throw new IndexOutOfBoundsException();
     }
-<<<<<<< HEAD
     public void ordenar(){
         Estudante auxiliar;
         for (int lento = 0; lento < qtosDados; lento++){
@@ -277,66 +221,3 @@ public class ManterEstudantes {
         }
     }
 }
-=======
-
-    public void ordenar(){
-        Estudante auxiliar;
-            for (int lento = 0; lento < qtosDados; lento++){
-                for (int rapido = lento+1; rapido < qtosDados; rapido++){
-                    if (Integer.parseInt(dados[lento].getRa()) > Integer.parseInt(dados[rapido].getRa())) {
-                        auxiliar = dados[lento];
-                        dados[lento] = dados[rapido];
-                        dados[rapido] = auxiliar;
-                    }
-                }
-            }
-    }
-    public Boolean estaVazio(){
-        if (dados[posicaoAtual] == null)
-            return true;
-        else
-            return false;
-    }
-    public Boolean estaNoInicio(){
-        for (int i = 0; i < qtosDados/2; i++) {
-            if (dados[i] == dados[posicaoAtual])
-                return true;
-        }
-        return false;
-    }
-    public Boolean estaNoFim(){
-        for (int i = qtosDados/2; i < qtosDados; i++) {
-            if (dados[i] == dados[posicaoAtual])
-                return true;
-        }
-        return false;
-    }
-
-    public void irAoInicio(){
-        posicaoAtual = 0;
-    }
-    public void irAoFim(){
-        posicaoAtual = qtosDados-1;
-    }
-    public void irAoAnterior(){
-        posicaoAtual -= 1;
-    }
-    public void irAoProximo(){
-        posicaoAtual += 1;
-    }
-    public int getPosicaoAtual(){
-        return posicaoAtual;
-    }
-    public void setPosicaoAtual(int novaPosicao){
-        posicaoAtual = novaPosicao;
-    }
-    public Situacao getSituacao(){
-        return situacao;
-    }
-    public void setSituacao(Situacao novaSituacao){
-        situacao = novaSituacao;
-    }
-
-    public Estudante valorDe(int indiceDeAcesso){return dados[indiceDeAcesso];}
-}
->>>>>>> a7bcaaff1f6f85cab40f4ba7cddd46dadaf58846
