@@ -26,17 +26,14 @@ public class ManterEstudantes {
                 boolean parar = false;
                 while (! parar) {
                     Estudante novoDado = new Estudante();
-
                     try {
 
                         if (novoDado.leuLinhaDoArquivo(arquivoDeEntrada) ) {
                             incluirNoFinal(novoDado);
                         }
                         else
-
                             parar = true;
                     }
-
                     catch (Exception erroDeLeitura) {
                         out.println(erroDeLeitura.getMessage());
                         parar = true;
