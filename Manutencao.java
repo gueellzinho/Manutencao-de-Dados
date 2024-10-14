@@ -47,9 +47,9 @@ public class Manutencao {
             leitor.nextLine();      // necessário após nextInt() para poder ler strings a seguir
             switch(opcao) {
                 case 1: incluirEstudante();break;
-                case 2: estuds.listarEstudantes();break;
+                case 2: listarEstudantes();break;
                 case 3: excluir();break;
-                case 4: estuds.listarSituacoes();break;
+                case 4: listarSituacoes();break;
                 case 5: digitaNotas();break;
                 case 6: ordenarPorCurso();break;
                 case 7: ordenarPorNome();break;
@@ -74,6 +74,42 @@ public class Manutencao {
         String nome = leitor.nextLine();
 
         estuds.incluirEstudante(curso,ra,nome);
+    }
+
+    public static void listarSituacoes() {
+        out.println("\n\nSituação estudantil\n");
+        String situacao = "";
+        for (int indice = 0; indice < estuds.qtosDados; indice++)
+        {
+            double mediaDesseEstudante = estuds.dados[indice].mediaDasNotas();
+            if (mediaDesseEstudante < 5)
+                situacao = "Não promovido(a)";
+            else
+                situacao = "Promovido(a)    ";
+
+            out.printf(
+                    "%4.1f %16s "+ estuds.dados[indice]+"\n", mediaDesseEstudante,
+                    situacao);
+        }
+        out.print("\n\nTecle [Enter] para prosseguir: ");
+        leitor.nextLine();
+    }
+
+    public static void listarEstudantes() {
+        out.println("\n\nListagem de Estudantes\n");
+        int contLinha = 0;  // contador de linhas
+        for (int ind = 0; ind < estuds.qtosDados; ind++)
+        {
+            out.println(estuds.dados[ind]);
+
+            if (++contLinha >= 20) {
+                out.print("\n\nTecle [Enter] para prosseguir: ");
+                leitor.nextLine();
+                contLinha = 0;
+            }
+        }
+        out.print("\n\nTecle [Enter] para prosseguir: ");
+        leitor.nextLine();
     }
 
     private static void excluir() throws Exception {

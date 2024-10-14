@@ -58,22 +58,6 @@ public class ManterEstudantes {
             arquivoDeSaida.write(dados[indice].formatoDeArquivo());
         arquivoDeSaida.close();
     }
-    public static void listarEstudantes() {
-        out.println("\n\nListagem de Estudantes\n");
-        int contLinha = 0;  // contador de linhas
-        for (int ind = 0; ind < qtosDados; ind++)
-        {
-            out.println(dados[ind]);
-
-            if (++contLinha >= 20) {
-                out.print("\n\nTecle [Enter] para prosseguir: ");
-                leitor.nextLine();
-                contLinha = 0;
-            }
-        }
-        out.print("\n\nTecle [Enter] para prosseguir: ");
-        leitor.nextLine();
-    }
 
     public boolean existeEstudante(Estudante estProcurado) {
         int inicio = 0;
@@ -146,24 +130,7 @@ public class ManterEstudantes {
             dados[indice] = dados[indice+1];
     }
 
-    public static void listarSituacoes() {
-        out.println("\n\nSituação estudantil\n");
-        String situacao = "";
-        for (int indice = 0; indice < qtosDados; indice++)
-        {
-            double mediaDesseEstudante = dados[indice].mediaDasNotas();
-            if (mediaDesseEstudante < 5)
-                situacao = "Não promovido(a)";
-            else
-                situacao = "Promovido(a)    ";
 
-            out.printf(
-                    "%4.1f %16s "+ dados[indice]+"\n", mediaDesseEstudante,
-                    situacao);
-        }
-        out.print("\n\nTecle [Enter] para prosseguir: ");
-        leitor.nextLine();
-    }
     public void trocar(int indMaior, int indMenor) {
         Estudante auxiliar = dados[indMaior];
         dados[indMaior] = dados[indMenor];
