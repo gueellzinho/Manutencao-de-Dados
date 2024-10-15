@@ -201,6 +201,7 @@ public class Manutencao {
             estudMenorNota(estuds.dados[indEstud], indDisciMenorMedia, indEstud);
             estudMaiorNota(estuds.dados[indEstud], indDisciMenorMedia, indEstud);
         }
+
         out.printf("\nDisciplina com mais aprovações: %s", disciplinas[indMaisAprov]);
         out.printf("\nDisciplina com mais retenções: %s\n", disciplinas[indMaisReten]);
         out.printf("\nEstudante com maior média: %s", estuds.dados[indEstudMaiorMedia].getNome());
@@ -209,8 +210,8 @@ public class Manutencao {
         for(int i = 0; i < qtasDisci; i++)
             out.printf("\nMédia %s: %f", disciplinas[i], (somasNotas[i] / estuds.qtosDados));
         out.printf("\nDisciplina com menor média: %s", disciplinas[indDisciMenorMedia]);
-        out.printf("\n%s teve a menor nota em %s", estuds.dados[indEstudMenorNota].getNome(), disciplinas[indDisciMenorMedia]);
-        out.printf("\n%s teve a maior nota em %s", estuds.dados[indEstudMaiorNota].getNome(), disciplinas[indDisciMenorMedia]);
+        out.printf("\n%s teve a menor nota em %s", estuds.dados[indEstudMenorNota].getNome().trim(), disciplinas[indDisciMenorMedia]);
+        out.printf("\n%s teve a maior nota em %s", estuds.dados[indEstudMaiorNota].getNome().trim(), disciplinas[indDisciMenorMedia]);
 
         out.print("\n\nTecle [Enter] para prosseguir: ");
         leitor.nextLine();
