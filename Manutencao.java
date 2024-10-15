@@ -2,6 +2,9 @@ import java.io.*;
 import java.util.Scanner;
 import static java.lang.System.*;
 
+
+//Miguel Lopes - 24142
+//Miguel Amorim - 24587
 public class Manutencao {
     static Scanner leitor = new Scanner(in);
     enum Ordens {porRa, porNome, porCurso, porMedia}
