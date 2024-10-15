@@ -12,7 +12,6 @@ public class Manutencao {
     private static int[] maioresAprovacoes, maioresRetencoes;
     private static double[] somasNotas;
     private static double notaMaisBaixa, notaMaisAlta;
-    // índice resultante da pesquisa binária
 
     public static void main(String[] args) throws Exception {
         try {
@@ -164,30 +163,41 @@ public class Manutencao {
         out.print("Digite o nome do arquivo para ser lido: ");
         String nomeArquivo = leitor.nextLine();
         lerDisciplinas(nomeArquivo);
+
         int indMaisAprov = 0, indMaisReten = 0, indEstudMaiorMedia = 0, indDisciMenorMedia = 0;
         double maiorMediaTemp, maiorMediaEstud = 0, menorMediaDisci = 10;
         maioresAprovacoes = new int[15];
         maioresRetencoes = new int[15];
         somasNotas = new double[15];
-        for(int indEstud = 0; indEstud < estuds.qtosDados; indEstud++){
+
+        for(int indEstud = 0; indEstud < estuds.qtosDados; indEstud++)
             maisAprovacoes(estuds.dados[indEstud]);
-            for(int indAprov = 0; indAprov < qtasDisci; indAprov++){
-                if(maioresAprovacoes[indAprov] >= indMaisAprov)
-                    indMaisAprov = indAprov;
-            }
+        for (int indAprov = 0; indAprov < qtasDisci; indAprov++) {
+            if (maioresAprovacoes[indAprov] >= indMaisAprov)
+                indMaisAprov = indAprov;
+        }
+        out.printf("\nDisciplina com mais aprovações: %s", disciplinas[indMaisAprov]);
 
+        for(int indEstud = 0; indEstud < estuds.qtosDados; indEstud++)
             maisRetencoes(estuds.dados[indEstud]);
-            for(int indReten = 0; indReten < qtasDisci; indReten++){
-                if(maioresRetencoes[indReten] >= indMaisReten)
-                    indMaisReten = indReten;
-            }
+        for (int indReten = 0; indReten < qtasDisci; indReten++) {
+            if (maioresRetencoes[indReten] >= indMaisReten)
+                indMaisReten = indReten;
+        }
+        out.printf("\nDisciplina com mais retenções: %s\n", disciplinas[indMaisReten]);
 
+        for(int indEstud = 0; indEstud < estuds.qtosDados; indEstud++) {
             maiorMediaTemp = estudMaiorMedia(estuds.dados[indEstud]);
-            if(maiorMediaTemp > maiorMediaEstud){
+            if (maiorMediaTemp > maiorMediaEstud) {
                 maiorMediaEstud = maiorMediaTemp;
                 indEstudMaiorMedia = indEstud;
             }
+        }
+        out.printf("\nEstudante com maior média: %s", estuds.dados[indEstudMaiorMedia].getNome());
+        out.printf("\nMaior nota desse estudante: %f", notaAlta(estuds.dados[indEstudMaiorMedia]));
+        out.printf("\nMenor nota desse estudante: %f\n", notaBaixa(estuds.dados[indEstudMaiorMedia]));
 
+        for(int indEstud = 0; indEstud < estuds.qtosDados; indEstud++){
             mediaDisciplinas(estuds.dados[indEstud]);
             for(int i = 0; i < qtasDisci; i++){
                 if((somasNotas[i] / estuds.qtosDados) < menorMediaDisci){
@@ -201,15 +211,9 @@ public class Manutencao {
             estudMenorNota(estuds.dados[indEstud], indDisciMenorMedia, indEstud);
             estudMaiorNota(estuds.dados[indEstud], indDisciMenorMedia, indEstud);
         }
-
-        out.printf("\nDisciplina com mais aprovações: %s", disciplinas[indMaisAprov]);
-        out.printf("\nDisciplina com mais retenções: %s\n", disciplinas[indMaisReten]);
-        out.printf("\nEstudante com maior média: %s", estuds.dados[indEstudMaiorMedia].getNome());
-        out.printf("\nMaior nota desse estudante: %f", notaAlta(estuds.dados[indEstudMaiorMedia]));
-        out.printf("\nMenor nota desse estudante: %f\n", notaBaixa(estuds.dados[indEstudMaiorMedia]));
         for(int i = 0; i < qtasDisci; i++)
             out.printf("\nMédia %s: %f", disciplinas[i], (somasNotas[i] / estuds.qtosDados));
-        out.printf("\nDisciplina com menor média: %s", disciplinas[indDisciMenorMedia]);
+        out.printf("\n\nDisciplina com menor média: %s", disciplinas[indDisciMenorMedia]);
         out.printf("\n%s teve a menor nota em %s", estuds.dados[indEstudMenorNota].getNome().trim(), disciplinas[indDisciMenorMedia]);
         out.printf("\n%s teve a maior nota em %s", estuds.dados[indEstudMaiorNota].getNome().trim(), disciplinas[indDisciMenorMedia]);
 
